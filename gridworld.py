@@ -5,7 +5,7 @@ import numpy as np
 import random
 import itertools
 import scipy.misc
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 class gameOb():
@@ -27,7 +27,7 @@ class gameEnv():
         self.objects = []
         self.partial = partial
         a = self.reset()
-        plt.imshow(a, interpolation="nearest")
+        # plt.imshow(a, interpolation="nearest")
 
     def reset(self):
         self.objects = []
@@ -129,3 +129,11 @@ class gameEnv():
             return state, (reward + penalty), done
         else:
             return state, (reward + penalty), done
+
+def processState(states):
+    """
+    Returns the game states 84x84x3 in a flattened array of shape (21168,1)
+    :param states: game states, 84x84x3 array
+    :return:
+    """
+    return np.reshape(states,[21168])
