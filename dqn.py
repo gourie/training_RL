@@ -50,7 +50,7 @@ class QnetworkMnih13():
 
         self.Q = tf.contrib.layers.fully_connected(inputs=l5_output, num_outputs=self.fc_layer2['nodes'],
                                      activation_fn=None, weights_initializer=tf.contrib.layers.xavier_initializer(), scope='FC2')
-        self.best_action = tf.argmax(self.Q, axis=2, name="bestAction")
+        self.best_action = tf.argmax(self.Q, axis=3, name="bestAction")
 
         # loss and optimizer
         q_target = tf.placeholder(shape=[None], dtype=tf.float32)
