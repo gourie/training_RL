@@ -24,8 +24,8 @@ updateModel = sgd.minimize(loss)
 init = tf.global_variables_initializer()
 
 #3. start session to execute on the graph
-y = .99
-e = 0.1
+y = .99  # learning rate
+e = 0.1  # exploration probability
 num_episodes = 2000
 #create lists to contain total steps and rewards per episode
 jList = []
@@ -47,12 +47,13 @@ with tf.Session() as sess:
                 a[0] = env.action_space.sample()
             #Get new state and reward from environment
             s1,r,d,_ = env.step(a[0])
-            #Obtain the Q' values by feeding the new state through our network
+            #Obtain the Q' values by feeding the new state through our network (TD-update in Q-learning takes one-step ahead)
             Q1 = sess.run(qOut,feed_dict={stateInp:np.identity(16)[s1:s1+1]})
             #Obtain maxQ' and set our target value for chosen action.
-            maxQ1 = np.max(Q1)
+            # maxQ1 = np.max(Q1)
             targetQ = allQ
-            targetQ[0,a[0]] = r + y*maxQ1
+            targetQ[0,a[0]] = r + y*np.max(Q1)
+            # !! We don't update/build the Q(s,a) value using moving average with LR since we don't want to build a Q-table (just learning the function f that maps state to action)
             #Train our network using target and predicted Q values
             _,W1 = sess.run([updateModel,W],feed_dict={stateInp:np.identity(16)[s:s+1],qSample:targetQ})
             rAll += r
